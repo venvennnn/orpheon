@@ -4,41 +4,25 @@ import { site } from "../lib/site";
 ---
 
 <BaseLayout title="About" description="What Orpheon is, and how the journal is written.">
-  <article class="max-w-2xl">
-    <p class="kicker">Method</p>
-    <h1 class="mt-3 font-serif text-5xl tracking-tight">About Orpheon</h1>
-    <p class="mt-6 font-serif text-2xl italic text-ink-soft">
-      A deterministic change-detection pipeline. AI is used only for semantic understanding and documentation — never as a nightly rewrite of a README.
-    </p>
-    <div class="prose prose-journal mt-10">
+  <article class="max-w-xl">
+    <h1 class="text-3xl font-medium tracking-tight">About</h1>
+    <div class="prose prose-journal mt-8">
       <p>
-        {site.title} is a continuously maintained technical record of work by {site.ownerName}.
-        It is not a conventional portfolio. Someone discovering a project should be able to choose their depth:
+        {site.title} is a technical record of work by {site.ownerName}. Each project has four depths: a plain explanation, a technical page, references, and build history.
       </p>
-      <ul>
-        <li><strong>Two minutes</strong> — Explain Like I'm 15</li>
-        <li><strong>I'm an engineer</strong> — Technical Deep Dive</li>
-        <li><strong>I want the theory</strong> — References & Ideas</li>
-        <li><strong>I want the making of</strong> — Build History</li>
-      </ul>
-      <h2>How the night run works</h2>
+      <h2>When it runs</h2>
       <p>
-        During the day, commits accumulate and Orpheon stays quiet. Around 23:30 Asia/Kolkata a GitHub Action compares each tracked repository's HEAD to the last processed SHA. Identical SHAs are skipped entirely — no diff, no model call, no regeneration.
+        It does not run overnight. It does not run when a tracked repository changes. It runs when you trigger the <strong>Update journal</strong> GitHub Action.
       </p>
       <p>
-        When HEAD has moved, Orpheon reads the accumulated diff, a little surrounding context, and any human <code>.orpheon.yml</code>. It classifies the day's work, updates only the pages that need it, appends a build-history entry, and commits:
-      </p>
-      <pre><code>orpheon: nightly journal update YYYY-MM-DD</code></pre>
-      <p>
-        Git is the source of truth. Human metadata is authoritative. The model provides interpretation. Orpheon provides continuity.
+        That Action still compares each repository’s HEAD to the last processed SHA. Unchanged repos are skipped. Changed repos are read as one accumulated diff, classified, and documented. Failed repos keep their previous SHA.
       </p>
       <h2>What it will not do</h2>
       <ul>
-        <li>Run after every push</li>
         <li>Invent papers, APIs, metrics, or users</li>
         <li>Publish secrets or private URLs</li>
         <li>Rewrite old build-history entries</li>
-        <li>Treat an unchanged repository as new material</li>
+        <li>Override human <code>.orpheon.yml</code></li>
       </ul>
     </div>
   </article>

@@ -48,7 +48,7 @@ class RepoContext:
         parts = [
             f"Repository: {self.repository}",
             f"Commit: {self.sha}",
-            f"Mode: {'bootstrap' if self.bootstrap else 'nightly-diff'}",
+            f"Mode: {'bootstrap' if self.bootstrap else 'diff'}",
             f"GitHub: {self.html_url}",
         ]
         if self.description:

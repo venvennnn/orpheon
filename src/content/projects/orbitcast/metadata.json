@@ -1,0 +1,19 @@
+{
+  "name": "OrbitCast",
+  "slug": "orbitcast",
+  "repository": "venvennnn/orbitcast",
+  "status": "active",
+  "categories": [
+    "Podcasts",
+    "Agents",
+    "Infrastructure"
+  ],
+  "tagline": "Type a topic once. Get a living RSS podcast that only publishes when something changed.",
+  "description": "OrbitCast researches, scripts, voices, and publishes episodes into a real RSS feed. A cron keeps active feeds alive.",
+  "demo": "https://web-13d.sea1.zerops.app",
+  "last_updated": "2026-08-09",
+  "last_commit": "589c9efd0a8c0113f394321a88fc9506defc8458",
+  "commit_count": 7,
+  "reference_count": 6,
+  "github": "https://github.com/venvennnn/orbitcast"
+}

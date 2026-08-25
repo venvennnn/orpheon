@@ -11,7 +11,7 @@ IMPORT_ENTRY = """{date}
 Project imported into Orpheon
 
 The first journal entry records that this repository is now tracked.
-Future nightly runs will append real engineering notes from git history.
+Future runs will append real engineering notes from git history when you ask Orpheon to update.
 Orpheon does not invent a backdated log from older commits.
 """
 

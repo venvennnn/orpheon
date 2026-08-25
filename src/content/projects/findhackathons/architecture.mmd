@@ -1,0 +1,4 @@
+flowchart LR
+  Worker[Modal worker] --> API[FastAPI]
+  API --> DB[(Postgres)]
+  Web[Next.js] --> API

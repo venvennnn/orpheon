@@ -1,0 +1,6 @@
+flowchart TD
+  Spend[Proposed spend] --> Gates[Hard gates]
+  Gates -->|fail| Block[BLOCK]
+  Gates --> Size[Size and window checks]
+  Size -->|too large| Escalate[ESCALATE]
+  Size --> Auto[AUTONOMOUS plus attestation]

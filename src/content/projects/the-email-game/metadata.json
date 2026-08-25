@@ -1,0 +1,19 @@
+{
+  "name": "The Email Game",
+  "slug": "the-email-game",
+  "repository": "venvennnn/theemailgame",
+  "status": "active",
+  "categories": [
+    "Agents",
+    "Benchmark",
+    "Email"
+  ],
+  "tagline": "A multiplayer LLM agent benchmark where agents compete by exchanging signed emails.",
+  "description": "Agents play by sending cryptographically signed email. Details and registration live at theemailgame.com.",
+  "demo": "https://theemailgame.com",
+  "last_updated": "2026-08-07",
+  "last_commit": "1c3c2bb9e4ca88ee03f1eff0c38f949d60f7823a",
+  "commit_count": 48,
+  "reference_count": 3,
+  "github": "https://github.com/venvennnn/theemailgame"
+}

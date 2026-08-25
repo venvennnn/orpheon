@@ -1,0 +1,19 @@
+{
+  "name": "Humor Genome",
+  "slug": "humor-genome",
+  "repository": "venvennnn/humor_genome_kaggle",
+  "status": "active",
+  "categories": [
+    "NLP",
+    "Gemma",
+    "Humor"
+  ],
+  "tagline": "Paste a joke — or a clip — and see the humor genome: structure, surprise, culture, audience fit.",
+  "description": "A Gemma-powered humor understanding engine for Build with Gemma: Humor Genome NYC, Track 2. It explains why a joke works instead of only generating more jokes.",
+  "demo": null,
+  "last_updated": "2026-07-25",
+  "last_commit": "14086d2e07beb7a460aeab3ea1e459fd1f720228",
+  "commit_count": 8,
+  "reference_count": 3,
+  "github": "https://github.com/venvennnn/humor_genome_kaggle"
+}

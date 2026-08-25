@@ -135,7 +135,7 @@ def run(
     load_cache()  # ensure file exists
 
     outcomes: list[ProjectOutcome] = []
-    print(f"Orpheon nightly · {len(projects)} enabled project(s) · {site.get('timezone', 'UTC')}")
+    print(f"Orpheon · {len(projects)} enabled project(s) · manual run")
     for project in projects:
         print(f"\n→ {project.repository}")
         try:
@@ -165,7 +165,7 @@ def run(
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Orpheon nightly journal pipeline")
+    parser = argparse.ArgumentParser(description="Orpheon journal pipeline (manual)")
     parser.add_argument("--project", help="Process a single slug or repository")
     parser.add_argument("--dry-run", action="store_true", help="Do not write files or update state")
     args = parser.parse_args(argv)
