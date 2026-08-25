@@ -1,0 +1,86 @@
+name: Orpheon nightly
+
+on:
+  schedule:
+    # 23:30 Asia/Kolkata == 18:00 UTC. Exact timing is best-effort.
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Optional slug or owner/name to process a single project
+        required: false
+        type: string
+      dry_run:
+        description: Collect and classify without writing files
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: orpheon-nightly
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TZ: Asia/Kolkata
+      LLM_PROVIDER: ${{ secrets.LLM_PROVIDER }}
+      LLM_MODEL: ${{ secrets.LLM_MODEL }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      ORPHEON_GITHUB_TOKEN: ${{ secrets.ORPHEON_GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout Orpheon
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pipeline
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run nightly pipeline
+        env:
+          PROJECT: ${{ github.event.inputs.project }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN:-}" = "true" ]; then
+            if [ -n "${PROJECT:-}" ]; then
+              python -m scripts.orchestrator --dry-run --project "$PROJECT"
+            else
+              python -m scripts.orchestrator --dry-run
+            fi
+          else
+            if [ -n "${PROJECT:-}" ]; then
+              python -m scripts.orchestrator --project "$PROJECT"
+            else
+              python -m scripts.orchestrator
+            fi
+          fi
+
+      - name: Commit journal updates
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          set -euo pipefail
+          git config user.name "orpheon-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/projects state
+          if git diff --cached --quiet; then
+            echo "No journal changes to commit."
+            exit 0
+          fi
+          DATE="$(TZ=Asia/Kolkata date +%Y-%m-%d)"
+          git commit -m "orpheon: nightly journal update ${DATE}"
+          git push

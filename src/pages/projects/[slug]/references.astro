@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ProjectHeader from "../../../components/ProjectHeader.astro";
+import Prose from "../../../components/Prose.astro";
+import { loadAllProjects, type Project } from "../../../lib/projects";
+import { renderMarkdown } from "../../../lib/markdown";
+
+export function getStaticPaths() {
+  return loadAllProjects().map((project) => ({
+    params: { slug: project.meta.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout title={`${project.meta.name} · References`} description={project.meta.tagline}>
+  <ProjectHeader project={project} />
+  <p class="mt-10 kicker">References & ideas</p>
+  <h2 class="mt-3 font-serif text-4xl tracking-tight">What influenced it?</h2>
+  {
+    project.references ? (
+      <Prose html={renderMarkdown(project.references.body)} provenance={project.references.meta} />
+    ) : (
+      <p class="mt-8 text-ink-soft">No references page yet.</p>
+    )
+  }
+</BaseLayout>

@@ -1,0 +1,15 @@
+{
+  "name": "Aftermath",
+  "slug": "aftermath",
+  "repository": "venvennnn/aftermath",
+  "status": "active",
+  "categories": ["AI", "Simulation", "Decision systems"],
+  "tagline": "A staging environment for business decisions, populated by customers who do not exist yet.",
+  "description": "Aftermath builds a synthetic customer ecosystem, lets those agents live through a proposed change, and reports the chain reaction — including a call from a customer who has not been created yet.",
+  "demo": null,
+  "last_updated": "2026-08-25",
+  "last_commit": "8a53a6327d2b226489cf0fae92a0dc7fc0b19f39",
+  "commit_count": 6,
+  "reference_count": 4,
+  "github": "https://github.com/venvennnn/aftermath"
+}

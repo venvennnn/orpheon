@@ -1,0 +1,63 @@
+---
+import { site, withBase } from "../lib/site";
+
+const here = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+const links = [
+  { href: withBase("projects"), label: "Projects" },
+  { href: withBase("experiments"), label: "Experiments" },
+  { href: withBase("about"), label: "About" },
+];
+
+function active(href: string) {
+  const normalized = href.replace(/\/$/, "");
+  if (normalized.endsWith("/projects")) {
+    return here === normalized || here.startsWith(`${normalized}/`);
+  }
+  return here === normalized;
+}
+---
+
+<header class="border-b border-line">
+  <div class="mx-auto flex max-w-6xl items-end justify-between gap-6 px-5 py-5 sm:px-8">
+    <a href={withBase()} class="group block">
+      <p class="kicker">Vol. I · Continuous record</p>
+      <p class="mt-1 font-serif text-3xl tracking-tight sm:text-4xl">{site.title}</p>
+    </a>
+    <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 pb-1 text-sm">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "tracking-wide hover:text-accent",
+              active(link.href) ? "text-accent" : "text-ink-soft",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a class="text-ink-soft hover:text-accent" href={site.github} rel="noreferrer">GitHub</a>
+      <button
+        id="theme-toggle"
+        type="button"
+        class="border border-line px-2 py-1 font-mono text-[11px] uppercase tracking-widest text-ink-soft hover:border-accent hover:text-accent"
+        aria-label="Toggle color theme"
+      >
+        Theme
+      </button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const button = document.getElementById("theme-toggle");
+  button?.addEventListener("click", () => {
+    const root = document.documentElement;
+    const next = root.classList.contains("dark") ? "light" : "dark";
+    root.classList.toggle("dark", next === "dark");
+    localStorage.setItem("orpheon-theme", next);
+    window.dispatchEvent(new Event("orpheon:theme"));
+  });
+</script>

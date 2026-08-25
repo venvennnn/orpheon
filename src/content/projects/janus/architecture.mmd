@@ -1,0 +1,7 @@
+flowchart LR
+  Upload[Model and feature dictionary] --> Agent[Language agent]
+  Agent --> Table[Mutability table]
+  Table --> Human1[Human confirms assumptions]
+  Human1 --> Engine[Deterministic audit engine]
+  Engine --> Findings[Findings package]
+  Findings --> Human2[Human accepts or rejects]

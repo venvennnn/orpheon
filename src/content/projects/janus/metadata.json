@@ -1,0 +1,15 @@
+{
+  "name": "Janus",
+  "slug": "janus",
+  "repository": "venvennnn/janus",
+  "status": "active",
+  "categories": ["AI", "Finance", "Model integrity"],
+  "tagline": "Does a lending model reward creditworthiness — or the ability to manipulate what it sees?",
+  "description": "Janus is a credit-model integrity product: an agent proposes how features can move, a deterministic engine measures the gaps, and a person decides.",
+  "demo": "https://janus-z3zs.onrender.com/",
+  "last_updated": "2026-08-16",
+  "last_commit": "19682bc54201b72b2fa84c0cf634d14d60963193",
+  "commit_count": 21,
+  "reference_count": 5,
+  "github": "https://github.com/venvennnn/janus"
+}

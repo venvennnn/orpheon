@@ -1,0 +1,11 @@
+flowchart TD
+  GDELT[GDELT NGrams + TOC] --> Candidates[Article candidates]
+  BrightData[Bright Data collectors] --> Articles[Normalized articles]
+  Candidates --> Articles
+  Articles --> Dedupe[Deduplication]
+  Dedupe --> Events[Event extraction]
+  Events --> Causal[Causal extraction]
+  Causal --> Graph[Directed event graph]
+  Graph --> Why[WHY]
+  Graph --> Next[WHAT NEXT]
+  Graph --> Ripple[REGIONAL RIPPLE]

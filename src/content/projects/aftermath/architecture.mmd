@@ -1,0 +1,7 @@
+flowchart LR
+  Decision[Decision Agent] --> Population[Synthetic population]
+  Population --> World[World Engine]
+  World --> Observer[Observer Agent]
+  Observer --> Counterfactual[Counterfactual Agent]
+  World --> Voice[Future call]
+  Voice --> Room[Operator room]

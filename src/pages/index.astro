@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { loadAllProjects } from "../lib/projects";
+import { site } from "../lib/site";
+
+const projects = loadAllProjects();
+---
+
+<BaseLayout>
+  <section class="max-w-3xl">
+    <p class="kicker">Engineering journal</p>
+    <h1 class="mt-4 font-serif text-5xl tracking-tight sm:text-7xl">{site.title}</h1>
+    <p class="mt-6 font-serif text-2xl italic leading-snug text-ink-soft sm:text-3xl">
+      {site.tagline}
+    </p>
+    <p class="mt-8 max-w-xl text-lg leading-relaxed text-ink-soft">
+      Each project is kept in four depths: a plain explanation, a technical record, the ideas behind it, and a build history that only grows. Orpheon reads git at night — never after every commit — and writes only when the work actually changed.
+    </p>
+  </section>
+
+  <section class="mt-16">
+    <div class="flex items-end justify-between gap-4 border-b border-line pb-3">
+      <h2 class="font-mono text-xs uppercase tracking-[0.22em] text-ink-soft">Projects</h2>
+      <p class="font-mono text-[11px] uppercase tracking-widest text-ink-soft">{projects.length} on record</p>
+    </div>
+    {
+      projects.length === 0 ? (
+        <p class="mt-10 max-w-xl text-ink-soft">
+          No project journals yet. Add a repository to <code>config/projects.yml</code> and let the nightly run import it.
+        </p>
+      ) : (
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          {projects.map((project, index) => (
+            <ProjectCard project={project} index={index} />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
