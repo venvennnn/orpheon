@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OrpheonChangeClassification",
+  "type": "object",
+  "required": ["summary", "importance", "categories", "documentation_updates"],
+  "additionalProperties": true,
+  "properties": {
+    "summary": { "type": "string", "minLength": 1 },
+    "importance": {
+      "type": "string",
+      "enum": ["trivial", "minor", "meaningful", "major"]
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "cosmetic",
+          "documentation",
+          "bugfix",
+          "performance",
+          "dependency",
+          "new_feature",
+          "architecture",
+          "model_change",
+          "data_change",
+          "deployment",
+          "research",
+          "refactor",
+          "other"
+        ]
+      }
+    },
+    "documentation_updates": {
+      "type": "object",
+      "required": ["eli15", "technical", "references", "architecture", "build_log"],
+      "properties": {
+        "eli15": { "type": "boolean" },
+        "technical": { "type": "boolean" },
+        "references": { "type": "boolean" },
+        "architecture": { "type": "boolean" },
+        "build_log": { "type": "boolean" },
+        "evolution": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "major_evolution": { "type": "boolean" },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "importance", "summary"],
+        "properties": {
+          "type": { "type": "string" },
+          "importance": {
+            "type": "string",
+            "enum": ["trivial", "minor", "meaningful", "major"]
+          },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}

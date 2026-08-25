@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/site";
+---
+
+<BaseLayout title="Not found">
+  <p class="kicker">404</p>
+  <h1 class="mt-3 font-serif text-5xl">This page is not in the journal.</h1>
+  <p class="mt-6">
+    <a class="text-accent underline-offset-4 hover:underline" href={withBase()}>Return to the index</a>
+  </p>
+</BaseLayout>

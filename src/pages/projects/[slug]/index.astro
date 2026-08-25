@@ -1,0 +1,86 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ProjectHeader from "../../../components/ProjectHeader.astro";
+import { loadAllProjects, splitBuildLog, splitEvolutions, type Project } from "../../../lib/projects";
+import { renderMarkdown } from "../../../lib/markdown";
+import { withBase } from "../../../lib/site";
+
+export function getStaticPaths() {
+  return loadAllProjects().map((project) => ({
+    params: { slug: project.meta.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const latest = splitBuildLog(project.buildLog?.body || "").slice(0, 1)[0];
+const evolution = splitEvolutions(project.evolution?.body || "").slice(-1)[0];
+---
+
+<BaseLayout title={project.meta.name} description={project.meta.tagline || project.meta.description}>
+  <ProjectHeader project={project} />
+
+  <div class="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(16rem,0.7fr)]">
+    <section>
+      <p class="kicker">What is this?</p>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed">
+        {project.meta.description || project.meta.tagline}
+      </p>
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        {
+          [
+            ["I have 2 minutes", "Explain like I'm 15", "eli15"],
+            ["I am an engineer", "Technical deep dive", "technical"],
+            ["I want the theory", "References & ideas", "references"],
+            ["I want the making of", "Build history", "history"],
+          ].map(([kicker, label, suffix]) => (
+            <a
+              class="border border-line p-4 hover:border-accent"
+              href={withBase(`projects/${project.meta.slug}/${suffix}`)}
+            >
+              <p class="font-mono text-[11px] uppercase tracking-widest text-ink-soft">{kicker}</p>
+              <p class="mt-2 font-serif text-xl">{label}</p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <aside class="border border-line bg-canvas-2/50 p-5">
+      <p class="kicker">Latest in the log</p>
+      {
+        latest ? (
+          <div class="mt-4">
+            <p class="font-mono text-xs uppercase tracking-widest">{latest.date}</p>
+            <div class="prose prose-journal mt-3 text-sm" set:html={renderMarkdown(latest.body)} />
+          </div>
+        ) : (
+          <p class="mt-4 text-sm text-ink-soft">No build history yet.</p>
+        )
+      }
+    </aside>
+  </div>
+
+  {
+    project.architecture && (
+      <section class="mt-16">
+        <p class="kicker">Architecture</p>
+        <h2 class="mt-3 font-serif text-3xl">How the pieces connect</h2>
+        <pre class="mermaid mt-6 border border-line bg-canvas-2 p-6">{project.architecture}</pre>
+      </section>
+    )
+  }
+
+  {
+    evolution && (
+      <section class="mt-16 max-w-2xl">
+        <p class="kicker">Project evolution</p>
+        <div class="prose prose-journal mt-4" set:html={renderMarkdown(evolution)} />
+      </section>
+    )
+  }
+</BaseLayout>

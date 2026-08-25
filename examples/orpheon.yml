@@ -1,0 +1,45 @@
+project:
+  name: Aftermath
+  tagline: >
+    A staging environment for business decisions, populated by
+    customers who do not exist yet.
+  description: >
+    Aftermath connects a proposed change to a seeded customer world
+    and reports the chain reaction.
+
+category:
+  - AI
+  - Simulation
+  - Decision systems
+
+status: active
+
+demo:
+  url: null
+
+repository:
+  public: true
+
+orpheon:
+  enabled: true
+
+ignore:
+  - "*.csv"
+  - "*.parquet"
+  - "*.pkl"
+  - "*.bin"
+  - "*.lock"
+  - "node_modules/**"
+  - ".venv/**"
+  - "outputs/**"
+  - "data/**"
+
+references:
+  - title: Next.js documentation
+    url: https://nextjs.org/docs
+    type: technical documentation
+    note: Application framework named in the repository README.
+
+notes:
+  - Synthetic customers are agents with memory, not survey respondents.
+  - The world engine is one of the central contributions.

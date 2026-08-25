@@ -1,0 +1,26 @@
+# Central registry of repositories Orpheon tracks.
+# Adding a project: append an entry, then the next nightly run bootstraps it.
+projects:
+  - repository: venvennnn/aftermath
+    slug: aftermath
+    enabled: true
+
+  - repository: venvennnn/causalens
+    slug: causalens
+    enabled: true
+
+  - repository: venvennnn/janus
+    slug: janus
+    enabled: true
+
+  - repository: venvennnn/orbitcast
+    slug: orbitcast
+    enabled: true
+
+  - repository: venvennnn/findhackathons
+    slug: findhackathons
+    enabled: true
+
+  - repository: venvennnn/forest_sentinel
+    slug: forest-sentinel
+    enabled: true

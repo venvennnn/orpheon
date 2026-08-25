@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { loadAllProjects } from "../../lib/projects";
+
+const projects = loadAllProjects();
+---
+
+<BaseLayout title="Projects" description="Tracked engineering projects in the Orpheon journal.">
+  <p class="kicker">Index</p>
+  <h1 class="mt-3 font-serif text-5xl tracking-tight">Projects</h1>
+  <p class="mt-4 max-w-xl text-lg text-ink-soft">
+    Every card is a living record. Unchanged repositories are ignored until git moves.
+  </p>
+  <div class="mt-10 grid gap-6 md:grid-cols-2">
+    {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+  </div>
+</BaseLayout>

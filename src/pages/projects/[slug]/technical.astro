@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ProjectHeader from "../../../components/ProjectHeader.astro";
+import Prose from "../../../components/Prose.astro";
+import { loadAllProjects, splitEvolutions, type Project } from "../../../lib/projects";
+import { renderMarkdown } from "../../../lib/markdown";
+
+export function getStaticPaths() {
+  return loadAllProjects().map((project) => ({
+    params: { slug: project.meta.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const evolutions = splitEvolutions(project.evolution?.body || "");
+---
+
+<BaseLayout title={`${project.meta.name} · Technical`} description={project.meta.tagline}>
+  <ProjectHeader project={project} />
+  <p class="mt-10 kicker">Technical deep dive</p>
+  <h2 class="mt-3 font-serif text-4xl tracking-tight">How does it work?</h2>
+  {
+    project.technical ? (
+      <Prose html={renderMarkdown(project.technical.body)} provenance={project.technical.meta} />
+    ) : (
+      <p class="mt-8 text-ink-soft">No technical record yet.</p>
+    )
+  }
+  {
+    project.architecture && (
+      <section class="mt-16">
+        <h3 class="font-serif text-3xl">Architecture</h3>
+        <pre class="mermaid mt-6 border border-line bg-canvas-2 p-6">{project.architecture}</pre>
+      </section>
+    )
+  }
+  {
+    evolutions.length > 0 && (
+      <section class="mt-16">
+        <h3 class="font-serif text-3xl">How it evolved</h3>
+        <div class="mt-6 space-y-10">
+          {evolutions.map((entry) => (
+            <div class="border-l border-accent pl-5">
+              <div class="prose prose-journal" set:html={renderMarkdown(entry)} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

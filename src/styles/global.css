@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --canvas: #f3efe4;
+  --canvas-2: #ebe6d8;
+  --ink: #1c1914;
+  --ink-soft: #5c574c;
+  --line: #d7d0c1;
+  --accent: #8f3d2c;
+  --accent-2: #2f4a3f;
+  --rule: #c4bba8;
+  --shadow: 0 1px 0 rgba(28, 25, 20, 0.04);
+}
+
+.dark {
+  --canvas: #12110e;
+  --canvas-2: #1b1914;
+  --ink: #ece6d8;
+  --ink-soft: #a39b8c;
+  --line: #2f2c26;
+  --accent: #d4866c;
+  --accent-2: #9db5a8;
+  --rule: #3a362e;
+  --shadow: none;
+}
+
+@theme inline {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-canvas: var(--canvas);
+  --color-canvas-2: var(--canvas-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-rule: var(--rule);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 7px),
+    var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.journal-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px);
+  background-size: 100% 2.75rem;
+  background-position: 0 0.2rem;
+}
+
+.prose-journal {
+  --tw-prose-body: var(--ink);
+  --tw-prose-headings: var(--ink);
+  --tw-prose-links: var(--accent);
+  --tw-prose-bold: var(--ink);
+  --tw-prose-quotes: var(--ink-soft);
+  --tw-prose-quote-borders: var(--accent);
+  --tw-prose-code: var(--ink);
+  --tw-prose-hr: var(--line);
+  --tw-prose-counters: var(--ink-soft);
+  --tw-prose-bullets: var(--ink-soft);
+  max-width: 42rem;
+}
+
+.prose-journal h1,
+.prose-journal h2,
+.prose-journal h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.prose-journal a {
+  text-underline-offset: 3px;
+}
+
+.prose-journal pre.mermaid {
+  background: var(--canvas-2);
+  border: 1px solid var(--line);
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+
+.prose-journal pre.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}

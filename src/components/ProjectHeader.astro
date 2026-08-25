@@ -1,0 +1,74 @@
+---
+import type { Project } from "../lib/projects";
+import { githubUrl } from "../lib/projects";
+import { formatShortDate, withBase } from "../lib/site";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { meta } = project;
+---
+
+<header class="border-b border-line pb-8">
+  <p class="kicker">{meta.repository}</p>
+  <h1 class="mt-4 font-serif text-4xl tracking-tight uppercase sm:text-6xl">{meta.name}</h1>
+  {
+    meta.tagline && (
+      <p class="mt-5 max-w-2xl font-serif text-2xl italic leading-snug text-ink-soft">{meta.tagline}</p>
+    )
+  }
+  {
+    meta.categories.length > 0 && (
+      <p class="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+        {meta.categories.join(" · ")}
+      </p>
+    )
+  }
+  <div class="mt-8 flex flex-wrap gap-3">
+    {
+      meta.demo && (
+        <a
+          class="border border-accent px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-accent hover:bg-accent hover:text-canvas"
+          href={meta.demo}
+          rel="noreferrer"
+        >
+          View demo
+        </a>
+      )
+    }
+    <a
+      class="border border-line px-4 py-2 font-mono text-[11px] uppercase tracking-widest hover:border-accent hover:text-accent"
+      href={githubUrl(project)}
+      rel="noreferrer"
+    >
+      GitHub
+    </a>
+  </div>
+  <p class="mt-6 font-mono text-[11px] uppercase tracking-widest text-ink-soft">
+    Updated {formatShortDate(meta.last_updated)} · {meta.commit_count ?? "—"} commits · {meta.reference_count ?? "—"} references
+  </p>
+</header>
+
+<nav class="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-b border-line pb-4 text-sm">
+  {
+    [
+      ["Overview", ""],
+      ["Explain simply", "eli15"],
+      ["Technical deep dive", "technical"],
+      ["References", "references"],
+      ["Build history", "history"],
+    ].map(([label, suffix]) => {
+      const href = withBase(`projects/${meta.slug}${suffix ? `/${suffix}` : ""}`);
+      const current = Astro.url.pathname.replace(/\/$/, "");
+      const target = href.replace(/\/$/, "");
+      const isActive = current === target;
+      return (
+        <a class:list={["hover:text-accent", isActive ? "text-accent" : "text-ink-soft"]} href={href}>
+          {label}
+        </a>
+      );
+    })
+  }
+</nav>

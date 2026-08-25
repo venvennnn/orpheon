@@ -1,0 +1,15 @@
+{
+  "name": "CausaLens",
+  "slug": "causalens",
+  "repository": "venvennnn/causalens",
+  "status": "active",
+  "categories": ["Causal graphs", "News intelligence", "NLP"],
+  "tagline": "Why it happened, what happens next, and which Southeast Asian markets could feel it.",
+  "description": "CausaLens turns regional news into deduplicated events and evidence-backed causal edges, then lets you walk upstream, downstream, and across borders.",
+  "demo": null,
+  "last_updated": "2026-08-24",
+  "last_commit": "e30c21f0e5181515c2fd5ece6414d9469c524856",
+  "commit_count": 22,
+  "reference_count": 7,
+  "github": "https://github.com/venvennnn/causalens"
+}
