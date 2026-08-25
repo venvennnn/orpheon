@@ -55,14 +55,12 @@ body {
   text-underline-offset: 3px;
 }
 
-.prose-journal pre.mermaid {
+pre.mermaid {
   background: #ffffff;
-  border: 1px solid var(--line);
-  padding: 1rem;
   overflow-x: auto;
 }
 
-.prose-journal pre.mermaid svg {
+pre.mermaid svg {
   max-width: 100%;
   height: auto;
 }
