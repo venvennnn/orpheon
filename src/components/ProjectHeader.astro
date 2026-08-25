@@ -20,6 +20,14 @@ const { meta } = project;
       <p class="mt-3 text-sm text-ink-soft">{meta.categories.join(" · ")}</p>
     )
   }
+  {
+    project.architecture && (
+      <section class="mt-6">
+        <h2 class="text-sm text-ink-soft">Architecture</h2>
+        <pre class="mermaid mt-3 overflow-x-auto border border-line p-4">{project.architecture}</pre>
+      </section>
+    )
+  }
   <div class="mt-5 flex flex-wrap gap-4 text-sm">
     {
       meta.demo && (

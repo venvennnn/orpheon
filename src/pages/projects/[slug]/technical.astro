@@ -31,14 +31,6 @@ const evolutions = splitEvolutions(project.evolution?.body || "");
     )
   }
   {
-    project.architecture && (
-      <section class="mt-16">
-        <h3 class="mt-12 text-lg font-medium">Architecture</h3>
-        <pre class="mermaid mt-4 border border-line p-4">{project.architecture}</pre>
-      </section>
-    )
-  }
-  {
     evolutions.length > 0 && (
       <section class="mt-16">
         <h3 class="mt-12 text-lg font-medium">How it evolved</h3>
