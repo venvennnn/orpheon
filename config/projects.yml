@@ -1,6 +1,5 @@
-# Every public GitHub repository to track.
-# Orpheon itself is excluded so the journal does not document its own deploys.
-# Empty or placeholder repos still appear; the journal will say so honestly.
+# Public repositories to track.
+# Excluded: orpheon (this site), orbitcast_android, empty/placeholder repos.
 projects:
   - repository: venvennnn/aftermath
     slug: aftermath
@@ -16,10 +15,6 @@ projects:
 
   - repository: venvennnn/orbitcast
     slug: orbitcast
-    enabled: true
-
-  - repository: venvennnn/orbitcast_android
-    slug: orbitcast-android
     enabled: true
 
   - repository: venvennnn/findhackathons
@@ -38,16 +33,8 @@ projects:
     slug: orpheus
     enabled: true
 
-  - repository: venvennnn/physai_track2
-    slug: physai-track2
-    enabled: true
-
   - repository: venvennnn/theemailgame
     slug: the-email-game
-    enabled: true
-
-  - repository: venvennnn/google_waxal_challenge
-    slug: google-waxal
     enabled: true
 
   - repository: venvennnn/sitrep_venvenn

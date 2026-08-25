@@ -1,6 +1,8 @@
 # Orpheon
 
-A simple engineering journal for every public repository on this account (except this site).
+A simple engineering journal for public repositories on this account.
+
+Excluded: this site, OrbitCast Android, and empty/placeholder repos (PhysAI Track 2, Google Waxal Challenge).
 
 Each project has four depths: Explain Like I'm 15, Technical, References, and Build History.
 
