@@ -1,0 +1,5 @@
+flowchart LR
+  Meeting[Meeting] --> Extract[Extract mentions]
+  Extract --> Detect[Drift confound conflict]
+  Detect --> Store[(SQLite glossary)]
+  Store --> Report[Markdown report]

@@ -1,16 +1,9 @@
 ---
 import { site } from "../lib/site";
-
-const year = new Date().toLocaleString("en-GB", { year: "numeric", timeZone: site.timezone });
 ---
 
 <footer class="border-t border-line">
-  <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between sm:px-8">
-    <p class="font-mono text-[11px] uppercase tracking-widest">
-      {site.title} · {year} · {site.timezone}
-    </p>
-    <p>
-      Generated when the work changes — not when a commit lands.
-    </p>
+  <div class="mx-auto max-w-3xl px-5 py-8 text-sm text-ink-soft sm:px-6">
+    <p>{site.title}. Updates when you run it.</p>
   </div>
 </footer>

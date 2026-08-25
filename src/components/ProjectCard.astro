@@ -7,47 +7,20 @@ interface Props {
   index: number;
 }
 
-const { project, index } = Astro.props;
+const { project } = Astro.props;
 const { meta } = project;
 const href = withBase(`projects/${meta.slug}`);
-const padded = String(index + 1).padStart(2, "0");
 ---
 
-<article class="group flex h-full flex-col border border-line bg-canvas-2/40 p-6 transition-colors hover:border-accent">
-  <div class="flex items-start justify-between gap-4">
-    <p class="font-mono text-[11px] tracking-widest text-ink-soft">{padded}</p>
-    <p class="font-mono text-[11px] uppercase tracking-widest text-ink-soft">{meta.status}</p>
-  </div>
-  <h2 class="mt-6 font-serif text-3xl tracking-tight uppercase">
-    <a href={href} class="hover:text-accent">{meta.name}</a>
+<article class="border-b border-line py-6">
+  <h2 class="text-lg font-medium">
+    <a href={href} class="hover:underline">{meta.name}</a>
   </h2>
-  {
-    meta.categories.length > 0 && (
-      <p class="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
-        {meta.categories.join(" · ")}
-      </p>
-    )
-  }
-  <p class="mt-5 max-w-md flex-1 text-[17px] leading-relaxed text-ink-soft">
-    {meta.tagline || meta.description || "A tracked engineering project."}
+  <p class="mt-1 text-ink-soft">
+    {meta.tagline || meta.description || "A tracked project."}
   </p>
-  <dl class="mt-8 grid grid-cols-2 gap-4 border-t border-line pt-4 font-mono text-[11px] uppercase tracking-widest">
-    <div>
-      <dt class="text-ink-soft">Last meaningful update</dt>
-      <dd class="mt-1 text-ink">{formatShortDate(meta.last_updated)}</dd>
-    </div>
-    <div>
-      <dt class="text-ink-soft">Record</dt>
-      <dd class="mt-1 text-ink">
-        {meta.commit_count ?? "—"} commits
-        <span class="text-ink-soft"> · </span>
-        {meta.reference_count ?? "—"} references
-      </dd>
-    </div>
-  </dl>
-  <p class="mt-6">
-    <a href={href} class="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-      Explore project →
-    </a>
+  <p class="mt-2 text-sm text-ink-soft">
+    {formatShortDate(meta.last_updated)}
+    {meta.categories.length > 0 && ` · ${meta.categories.join(", ")}`}
   </p>
 </article>

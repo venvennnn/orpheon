@@ -1,0 +1,7 @@
+flowchart LR
+  Cron --> Queue[Valkey]
+  Queue --> Worker
+  Worker --> TTS
+  TTS --> Storage[Object storage]
+  API --> RSS
+  Storage --> RSS

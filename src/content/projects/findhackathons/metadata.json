@@ -1,0 +1,19 @@
+{
+  "name": "FindHackathons",
+  "slug": "findhackathons",
+  "repository": "venvennnn/findhackathons",
+  "status": "active",
+  "categories": [
+    "Discovery",
+    "Hackathons",
+    "Full stack"
+  ],
+  "tagline": "A beginner goes from the landing page to a shortlist of finishable hackathons in under 90 seconds.",
+  "description": "AI-enriched discovery and alerts for developer hackathons and data science competitions.",
+  "demo": "https://findhackathons-six.vercel.app",
+  "last_updated": "2026-08-22",
+  "last_commit": "c800e204f048fbe344bc82819a29ec3baf5873a8",
+  "commit_count": 70,
+  "reference_count": 6,
+  "github": "https://github.com/venvennnn/findhackathons"
+}

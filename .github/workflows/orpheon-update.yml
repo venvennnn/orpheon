@@ -1,9 +1,6 @@
-name: Orpheon nightly
+name: Update journal
 
 on:
-  schedule:
-    # 23:30 Asia/Kolkata == 18:00 UTC. Exact timing is best-effort.
-    - cron: "0 18 * * *"
   workflow_dispatch:
     inputs:
       project:
@@ -17,7 +14,7 @@ on:
         default: false
 
 concurrency:
-  group: orpheon-nightly
+  group: orpheon-update
   cancel-in-progress: false
 
 permissions:
@@ -50,7 +47,7 @@ jobs:
       - name: Install pipeline
         run: pip install -r scripts/requirements.txt
 
-      - name: Run nightly pipeline
+      - name: Run journal pipeline
         env:
           PROJECT: ${{ github.event.inputs.project }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}
@@ -82,5 +79,5 @@ jobs:
             exit 0
           fi
           DATE="$(TZ=Asia/Kolkata date +%Y-%m-%d)"
-          git commit -m "orpheon: nightly journal update ${DATE}"
+          git commit -m "orpheon: journal update ${DATE}"
           git push

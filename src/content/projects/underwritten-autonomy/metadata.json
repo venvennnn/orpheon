@@ -1,0 +1,19 @@
+{
+  "name": "Underwritten Autonomy",
+  "slug": "underwritten-autonomy",
+  "repository": "venvennnn/underwritten_autonomy",
+  "status": "active",
+  "categories": [
+    "Web3",
+    "Agents",
+    "Risk"
+  ],
+  "tagline": "Don't give agents static spending limits. Underwrite exposure from behaviour, then enforce it.",
+  "description": "Stage-1 evidence package: risk engine, frozen scorecard, simulator, evaluation, and a single-file demo. NTU InnovateX 2026 Track 2.",
+  "demo": null,
+  "last_updated": "2026-08-13",
+  "last_commit": "5b3e3fa097704bcae9e4854ac870e2ec1d816d24",
+  "commit_count": 17,
+  "reference_count": 5,
+  "github": "https://github.com/venvennnn/underwritten_autonomy"
+}

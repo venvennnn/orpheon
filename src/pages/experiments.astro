@@ -6,19 +6,16 @@ import { isExperiment, loadAllProjects } from "../lib/projects";
 const experiments = loadAllProjects().filter(isExperiment);
 ---
 
-<BaseLayout title="Experiments" description="Experimental work tracked by Orpheon.">
-  <p class="kicker">Lab bench</p>
-  <h1 class="mt-3 font-serif text-5xl tracking-tight">Experiments</h1>
-  <p class="mt-4 max-w-xl text-lg text-ink-soft">
-    Work marked experimental in project metadata or <code>.orpheon.yml</code>.
+<BaseLayout title="Experiments" description="Experimental or placeholder repositories.">
+  <h1 class="text-3xl font-medium tracking-tight">Experiments</h1>
+  <p class="mt-3 text-ink-soft">
+    Repositories marked experimental — including empty or placeholder repos.
   </p>
   {
     experiments.length === 0 ? (
-      <p class="mt-12 max-w-xl border border-dashed border-line p-8 text-ink-soft">
-        Nothing is flagged as an experiment yet. Set <code>status: experimental</code> on a project and the next successful generation will land it here.
-      </p>
+      <p class="mt-8 text-ink-soft">None flagged yet.</p>
     ) : (
-      <div class="mt-10 grid gap-6 md:grid-cols-2">
+      <div class="mt-8">
         {experiments.map((project, index) => (
           <ProjectCard project={project} index={index} />
         ))}

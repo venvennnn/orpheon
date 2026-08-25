@@ -21,8 +21,7 @@ const { project } = Astro.props;
 
 <BaseLayout title={`${project.meta.name} · Explain simply`} description={project.meta.tagline}>
   <ProjectHeader project={project} />
-  <p class="mt-10 kicker">Explain like I'm 15</p>
-  <h2 class="mt-3 font-serif text-4xl tracking-tight">What is this, plainly?</h2>
+  <h2 class="mt-8 text-xl font-medium">Explain simply</h2>
   {
     project.eli15 ? (
       <Prose html={renderMarkdown(project.eli15.body)} provenance={project.eli15.meta} />

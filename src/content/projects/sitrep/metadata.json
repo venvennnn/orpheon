@@ -1,0 +1,19 @@
+{
+  "name": "DriftGuard",
+  "slug": "sitrep",
+  "repository": "venvennnn/sitrep_venvenn",
+  "status": "active",
+  "categories": [
+    "Agents",
+    "Metrics",
+    "SitRep"
+  ],
+  "tagline": "Catches when teams silently redefine the KPIs they all report on.",
+  "description": "A SitRep Marketplace agent: after meetings it extracts working definitions, compares them to memory, and flags drift, confounded value changes, and cross-team conflicts.",
+  "demo": null,
+  "last_updated": "2026-07-26",
+  "last_commit": "8eee32a23e15b7d5a228c1f1d74bfbcf39a9ce62",
+  "commit_count": 3,
+  "reference_count": 3,
+  "github": "https://github.com/venvennnn/sitrep_venvenn"
+}

@@ -27,12 +27,11 @@ async function draw() {
   const nodes = collectNodes();
   if (!nodes.length) return;
   const mermaid = (await import("mermaid")).default;
-  const dark = document.documentElement.classList.contains("dark");
   mermaid.initialize({
     startOnLoad: false,
     securityLevel: "strict",
-    theme: dark ? "dark" : "neutral",
-    fontFamily: "IBM Plex Sans, ui-sans-serif, sans-serif",
+    theme: "neutral",
+    fontFamily: "ui-sans-serif, system-ui, sans-serif",
     flowchart: { curve: "basis", htmlLabels: false },
   });
   for (const node of nodes) {
@@ -46,7 +45,4 @@ async function draw() {
 
 export function initMermaid() {
   void draw();
-  window.addEventListener("orpheon:theme", () => {
-    void draw();
-  });
 }
