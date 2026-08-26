@@ -4,7 +4,7 @@ A simple engineering journal for public repositories on this account.
 
 Excluded: this site, OrbitCast Android, and empty/placeholder repos (PhysAI Track 2, Google Waxal Challenge).
 
-Each project has four depths: Explain Like I'm 15, Technical, References, and Build History.
+Each project is one page: problem, summary, architecture, results, and examples.
 
 Site: **https://venvennnn.github.io/orpheon/**
 

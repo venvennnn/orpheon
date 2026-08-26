@@ -33,8 +33,6 @@ CATEGORIES = {
     "other",
 }
 
-RESEARCH_CATEGORIES = {"research", "model_change", "architecture", "new_feature"}
-
 SYSTEM = """You classify software repository changes for Orpheon, an engineering journal.
 Return JSON only. Be conservative: do not mark documentation for update unless the change
 actually affects how the project should be explained.
@@ -49,12 +47,12 @@ Allowed categories: {categories}
 Importance: trivial | minor | meaningful | major
 
 documentation_updates flags:
-- eli15: product purpose/audience changed
-- technical: internals, APIs, data flow, setup changed
-- references: new papers, algorithms, libraries, or research concepts
+- problem: the problem the project attacks changed
+- summary: the one-paragraph product story changed
 - architecture: components or data flow changed
-- build_log: anything non-cosmetic worth recording
-- evolution: only for a major architectural transition
+- results: outcomes, evaluation, limits, or what shipped changed
+- examples: use cases or walkthroughs changed
+- build_log: anything non-cosmetic worth recording internally
 
 If importance is trivial, set every documentation_updates flag to false.
 
@@ -70,12 +68,12 @@ class ChangeItem(BaseModel):
 
 
 class DocumentationUpdates(BaseModel):
-    eli15: bool = False
-    technical: bool = False
-    references: bool = False
+    problem: bool = False
+    summary: bool = False
     architecture: bool = False
+    results: bool = False
+    examples: bool = False
     build_log: bool = False
-    evolution: bool = False
 
 
 class Classification(BaseModel):
@@ -91,23 +89,18 @@ class Classification(BaseModel):
         updates = self.documentation_updates
         return any(
             [
-                updates.eli15,
-                updates.technical,
-                updates.references,
+                updates.problem,
+                updates.summary,
                 updates.architecture,
+                updates.results,
+                updates.examples,
                 updates.build_log,
-                updates.evolution,
-                self.major_evolution,
             ]
         )
 
     @property
     def needs_research(self) -> bool:
-        if not self.needs_generation:
-            return False
-        if not self.documentation_updates.references:
-            return False
-        return any(cat in RESEARCH_CATEGORIES for cat in self.categories)
+        return False
 
 
 def trivial_classification(reason: str) -> Classification:
@@ -127,12 +120,12 @@ def bootstrap_classification() -> Classification:
         importance="major",
         categories=["other"],
         documentation_updates=DocumentationUpdates(
-            eli15=True,
-            technical=True,
-            references=True,
+            problem=True,
+            summary=True,
             architecture=True,
+            results=True,
+            examples=True,
             build_log=True,
-            evolution=False,
         ),
         major_evolution=False,
         changes=[
@@ -159,9 +152,8 @@ def validate_payload(payload: dict[str, Any]) -> Classification:
         model.documentation_updates = DocumentationUpdates()
         model.major_evolution = False
     if model.major_evolution:
-        model.documentation_updates.evolution = True
         model.documentation_updates.architecture = True
-        model.documentation_updates.technical = True
+        model.documentation_updates.results = True
         model.documentation_updates.build_log = True
     return model
 

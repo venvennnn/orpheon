@@ -9,16 +9,18 @@ from zoneinfo import ZoneInfo
 import yaml
 
 WORD_LIMITS = {
-    "eli15": 700,
-    "technical": 1000,
-    "references": 900,
+    "problem": 400,
+    "summary": 400,
+    "results": 500,
+    "examples": 400,
     "build_log_entry": 250,
 }
 
 WORD_MINIMA = {
-    "eli15": 350,
-    "technical": 500,
-    "references": 250,
+    "problem": 40,
+    "summary": 40,
+    "results": 40,
+    "examples": 30,
 }
 
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n?", re.DOTALL)

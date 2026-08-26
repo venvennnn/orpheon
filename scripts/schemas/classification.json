@@ -33,14 +33,14 @@
     },
     "documentation_updates": {
       "type": "object",
-      "required": ["eli15", "technical", "references", "architecture", "build_log"],
+      "required": ["problem", "summary", "architecture", "results", "examples", "build_log"],
       "properties": {
-        "eli15": { "type": "boolean" },
-        "technical": { "type": "boolean" },
-        "references": { "type": "boolean" },
+        "problem": { "type": "boolean" },
+        "summary": { "type": "boolean" },
         "architecture": { "type": "boolean" },
-        "build_log": { "type": "boolean" },
-        "evolution": { "type": "boolean" }
+        "results": { "type": "boolean" },
+        "examples": { "type": "boolean" },
+        "build_log": { "type": "boolean" }
       },
       "additionalProperties": true
     },

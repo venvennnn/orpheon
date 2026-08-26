@@ -16,7 +16,6 @@ export interface ProjectMeta {
   last_updated: string;
   last_commit: string;
   commit_count?: number;
-  reference_count?: number;
   github?: string;
 }
 
@@ -25,14 +24,18 @@ export interface MarkdownDoc {
   body: string;
 }
 
+export interface Takeaway {
+  title: string;
+  body: string;
+}
+
 export interface Project {
   meta: ProjectMeta;
-  eli15: MarkdownDoc | null;
-  technical: MarkdownDoc | null;
-  references: MarkdownDoc | null;
-  buildLog: MarkdownDoc | null;
+  problem: MarkdownDoc | null;
+  summary: MarkdownDoc | null;
+  results: MarkdownDoc | null;
+  examples: MarkdownDoc | null;
   architecture: string;
-  evolution: MarkdownDoc | null;
 }
 
 function readMarkdown(filePath: string): MarkdownDoc | null {
@@ -65,12 +68,11 @@ export function loadProject(slug: string): Project | null {
   meta.categories = meta.categories || [];
   return {
     meta,
-    eli15: readMarkdown(path.join(folder, "eli15.md")),
-    technical: readMarkdown(path.join(folder, "technical.md")),
-    references: readMarkdown(path.join(folder, "references.md")),
-    buildLog: readMarkdown(path.join(folder, "build-log.md")),
+    problem: readMarkdown(path.join(folder, "problem.md")),
+    summary: readMarkdown(path.join(folder, "summary.md")),
+    results: readMarkdown(path.join(folder, "results.md")),
+    examples: readMarkdown(path.join(folder, "examples.md")),
     architecture: readOptional(path.join(folder, "architecture.mmd")).trim(),
-    evolution: readMarkdown(path.join(folder, "evolution.md")),
   };
 }
 
@@ -95,22 +97,17 @@ export function githubUrl(project: Project): string {
   return project.meta.github || `https://github.com/${project.meta.repository}`;
 }
 
-export function splitBuildLog(body: string): { date: string; body: string }[] {
-  if (!body.trim()) return [];
-  const chunks = body.trim().split(/\n(?=\d{1,2} [A-Z][a-z]+ \d{4}\s*\n)/);
-  return chunks
-    .map((chunk) => {
-      const lines = chunk.trim().split("\n");
-      return { date: lines[0] ?? "", body: lines.slice(1).join("\n").trim() };
-    })
-    .filter((entry) => entry.date);
-}
-
-export function splitEvolutions(body: string): string[] {
-  if (!body.trim()) return [];
-  return body
-    .trim()
-    .split(/\n(?=Evolution #\d+)/)
-    .map((chunk) => chunk.trim())
-    .filter(Boolean);
+export function splitTakeaways(body: string): { intro: string; takeaways: Takeaway[] } {
+  if (!body.trim()) return { intro: "", takeaways: [] };
+  const parts = body.trim().split(/\n(?=###\s+)/);
+  if (parts.length < 2) return { intro: body.trim(), takeaways: [] };
+  const intro = parts[0]?.trim() ?? "";
+  const takeaways = parts.slice(1).map((chunk) => {
+    const lines = chunk.trim().split("\n");
+    return {
+      title: (lines[0] ?? "").replace(/^###\s+/, "").trim(),
+      body: lines.slice(1).join("\n").trim(),
+    };
+  });
+  return { intro, takeaways };
 }

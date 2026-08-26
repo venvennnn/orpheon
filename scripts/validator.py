@@ -11,10 +11,11 @@ from .generate_architecture import looks_like_mermaid
 from .security import contains_secret, looks_like_private_url
 from .textutil import WORD_LIMITS, parse_frontmatter, word_count
 
-REQUIRED_SECTIONS = {
-    "eli15.md": [],
-    "technical.md": [],
-    "references.md": ["Used / Influenced This Project"],
+REQUIRED_SECTIONS: dict[str, list[str]] = {
+    "problem.md": [],
+    "summary.md": [],
+    "results.md": [],
+    "examples.md": [],
 }
 
 FILE_REF_RE = re.compile(
@@ -42,7 +43,7 @@ def validate_bundle(
 
     required = ["metadata.json"]
     if bootstrap:
-        required.extend(["eli15.md", "technical.md", "references.md", "architecture.mmd", "build-log.md"])
+        required.extend(["problem.md", "summary.md", "results.md", "examples.md", "architecture.mmd", "build-log.md"])
     for name in required:
         if name not in files:
             errors.append(f"missing required file {name}")
@@ -51,9 +52,10 @@ def validate_bundle(
         errors.extend(_validate_metadata(files["metadata.json"]))
 
     mapping = {
-        "eli15.md": "eli15",
-        "technical.md": "technical",
-        "references.md": "references",
+        "problem.md": "problem",
+        "summary.md": "summary",
+        "results.md": "results",
+        "examples.md": "examples",
     }
     for filename, kind in mapping.items():
         if filename not in files:
@@ -68,13 +70,6 @@ def validate_bundle(
             errors.append("architecture.mmd is not syntactically reasonable Mermaid")
         if contains_secret(files["architecture.mmd"]):
             errors.append("architecture.mmd contains secret-like content")
-
-    if "evolution.md" in files:
-        if contains_secret(files["evolution.md"]):
-            errors.append("evolution.md contains secret-like content")
-        meta, body = parse_frontmatter(files["evolution.md"])
-        if not body.strip():
-            errors.append("evolution.md is empty")
 
     return ValidationResult(ok=not errors, errors=errors, warnings=warnings)
 

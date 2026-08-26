@@ -74,10 +74,11 @@ def test_classification_schema_and_trivial_override():
         "importance": "trivial",
         "categories": ["cosmetic"],
         "documentation_updates": {
-            "eli15": True,
-            "technical": True,
-            "references": True,
+            "problem": True,
+            "summary": True,
+            "results": True,
             "architecture": True,
+            "examples": True,
             "build_log": True,
         },
         "major_evolution": True,
@@ -87,7 +88,7 @@ def test_classification_schema_and_trivial_override():
     assert result.needs_generation is False
     assert result.major_evolution is False
     boot = bootstrap_classification()
-    assert boot.documentation_updates.eli15 is True
+    assert boot.documentation_updates.problem is True
     assert trivial_classification("lockfile").needs_generation is False
 
 
@@ -96,8 +97,8 @@ def test_json_fence_parsing():
     assert parsed == {"a": 1}
 
 
-def test_validator_rejects_secrets_and_overlong_eli15():
-    words = " ".join(["word"] * 720)
+def test_validator_rejects_secrets_and_overlong_problem():
+    words = " ".join(["word"] * 420)
     files = {
         "metadata.json": json.dumps(
             {
@@ -110,7 +111,7 @@ def test_validator_rejects_secrets_and_overlong_eli15():
                 "categories": ["AI"],
             }
         ),
-        "eli15.md": with_frontmatter(
+        "problem.md": with_frontmatter(
             {
                 "project": "X",
                 "generated_by": "orpheon",
@@ -120,7 +121,7 @@ def test_validator_rejects_secrets_and_overlong_eli15():
             },
             words,
         ),
-        "technical.md": with_frontmatter(
+        "summary.md": with_frontmatter(
             {
                 "project": "X",
                 "generated_by": "orpheon",
@@ -128,9 +129,9 @@ def test_validator_rejects_secrets_and_overlong_eli15():
                 "source_repository": "a/b",
                 "source_commit": "abc",
             },
-            " ".join(["tech"] * 600),
+            " ".join(["sum"] * 80),
         ),
-        "references.md": with_frontmatter(
+        "results.md": with_frontmatter(
             {
                 "project": "X",
                 "generated_by": "orpheon",
@@ -138,7 +139,17 @@ def test_validator_rejects_secrets_and_overlong_eli15():
                 "source_repository": "a/b",
                 "source_commit": "abc",
             },
-            "## Used / Influenced This Project\n\nNone listed.\n",
+            " ".join(["res"] * 80),
+        ),
+        "examples.md": with_frontmatter(
+            {
+                "project": "X",
+                "generated_by": "orpheon",
+                "generated_at": "2026-08-25",
+                "source_repository": "a/b",
+                "source_commit": "abc",
+            },
+            " ".join(["ex"] * 40),
         ),
         "architecture.mmd": "graph LR\nA --> B\n",
         "build-log.md": with_frontmatter(
@@ -154,9 +165,9 @@ def test_validator_rejects_secrets_and_overlong_eli15():
     }
     result = validate_bundle(files, tree=["src/app.ts"], bootstrap=True)
     assert result.ok is False
-    assert any("700" in error for error in result.errors)
+    assert any("400" in error for error in result.errors)
 
-    files["eli15.md"] = with_frontmatter(
+    files["problem.md"] = with_frontmatter(
         {
             "project": "X",
             "generated_by": "orpheon",
@@ -164,7 +175,7 @@ def test_validator_rejects_secrets_and_overlong_eli15():
             "source_repository": "a/b",
             "source_commit": "abc",
         },
-        "This is a fine explanation of the product purpose and audience.\nOPENAI_API_KEY=sk-leak",
+        "This is a fine problem statement for the product.\nOPENAI_API_KEY=sk-leak",
     )
     result = validate_bundle(files, tree=["src/app.ts"], bootstrap=True)
     assert result.ok is False

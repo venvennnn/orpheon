@@ -32,31 +32,10 @@ Rules:
 - Do not include YAML frontmatter; it is added later.
 """
 
-ELI15_PROMPT = """Write the Explain Like I'm 15 page.
+PROBLEM_PROMPT = """Write the Problem section for this project page.
 
-Target 400–700 words. Hard maximum {limit} words.
-Cover: the problem, why it matters, what the product does, what goes in, what comes out,
-a simple example, an analogy if useful, and who might use it.
-Avoid unnecessary jargon.
-
-Existing page (revise only if the product purpose changed; otherwise rewrite from current evidence):
-{existing}
-
-Evidence:
-{bundle}
-
-Return JSON: {{"markdown": "..."}}
-"""
-
-TECHNICAL_PROMPT = """Write the Technical Deep Dive.
-
-Target 700–1000 words. Hard maximum {limit} words.
-Include sections that the evidence supports among:
-problem statement, architecture, system components, data flow, models/algorithms,
-APIs, storage, important libraries, design decisions, tradeoffs, use cases,
-limitations, setup instructions, demo instructions.
-Do not embed a Mermaid diagram; architecture is stored separately.
-Only mention files and APIs that appear in the evidence.
+Target 120–280 words. Hard maximum {limit} words.
+State the gap the repository is attacking. Do not pitch. Do not invent users or metrics.
 
 Existing page:
 {existing}
@@ -67,27 +46,11 @@ Evidence:
 Return JSON: {{"markdown": "..."}}
 """
 
-REFERENCES_PROMPT = """Write the References & Ideas page.
+SUMMARY_PROMPT = """Write the Summary section for this project page.
 
-Hard maximum {limit} words.
-
-Structure:
-## Used / Influenced This Project
-Only items explicitly present in README, .orpheon.yml, comments, citations, commit messages, or existing docs.
-If none are explicit, say so honestly. Never fabricate influence.
-
-## Related Reading Discovered by Orpheon
-Use ONLY the supplied discovered items. Label this section exactly:
-Related Reading Discovered by Orpheon
-If the list is empty, omit the section rather than inventing sources.
-
-Each reference needs title, link, type, a short explanation, and which part of the project it relates to.
-
-Trusted human references from .orpheon.yml:
-{human_refs}
-
-Discovered by Orpheon (may be empty):
-{discovered}
+Target 120–280 words. Hard maximum {limit} words.
+Start with one or two paragraphs of what the product is.
+Then add exactly three Markdown h3 takeaways (### Heading) with one or two sentences each.
 
 Existing page:
 {existing}
@@ -98,32 +61,35 @@ Evidence:
 Return JSON: {{"markdown": "..."}}
 """
 
-EVOLUTION_PROMPT = """If and only if this is a major architectural transition, write one evolution entry.
+RESULTS_PROMPT = """Write the Results section for this project page.
 
-Shape:
+Target 150–350 words. Hard maximum {limit} words.
+Cover only what the evidence supports: what was built, how it is evaluated or demoed, and honest limits.
+Do not invent benchmarks, users, or dataset sizes.
+Do not embed a Mermaid diagram.
 
-Evolution #{number}
-{date}
-
-FROM
-...
-
-TO
-...
-
-Why it changed
-...
-
-Only use components supported by the repository evidence.
-If this is not a true architectural transition, return {{"skip": true}}.
-
-Existing evolution log:
+Existing page:
 {existing}
 
 Evidence:
 {bundle}
 
-Return JSON: {{"skip": false, "markdown": "..."}} or {{"skip": true}}
+Return JSON: {{"markdown": "..."}}
+"""
+
+EXAMPLES_PROMPT = """Write the Examples section for this project page.
+
+Target 80–250 words. Hard maximum {limit} words.
+Give one or two concrete use cases or walkthroughs supported by the repository.
+Do not invent customers, logos, or unpublished numbers.
+
+Existing page:
+{existing}
+
+Evidence:
+{bundle}
+
+Return JSON: {{"markdown": "..."}}
 """
 
 SHORTEN_PROMPT = """The following Markdown exceeds {limit} words ({count} words).
@@ -215,10 +181,6 @@ def _demo(context: RepoContext) -> str | None:
     return context.homepage or None
 
 
-def _count_references(markdown: str) -> int:
-    return markdown.count("http://") + markdown.count("https://")
-
-
 def generate_docs(
     context: RepoContext,
     classification: Classification,
@@ -226,57 +188,33 @@ def generate_docs(
     *,
     discovered: list[dict[str, Any]] | None = None,
 ) -> GeneratedBundle:
+    del discovered
     updates = classification.documentation_updates
     existing = context.existing_docs
     bundle_out = GeneratedBundle()
     project_name = _name(context)
 
-    if context.bootstrap or updates.eli15:
-        body = _fit(
-            llm,
-            "eli15",
-            _markdown_from(
+    sections = (
+        ("problem", "problem.md", PROBLEM_PROMPT),
+        ("summary", "summary.md", SUMMARY_PROMPT),
+        ("results", "results.md", RESULTS_PROMPT),
+        ("examples", "examples.md", EXAMPLES_PROMPT),
+    )
+    for kind, filename, prompt in sections:
+        if context.bootstrap or getattr(updates, kind):
+            body = _fit(
                 llm,
-                ELI15_PROMPT.format(
-                    limit=WORD_LIMITS["eli15"],
-                    existing=strip_frontmatter(existing.get("eli15.md", "")) or "(none)",
-                    bundle=context.to_prompt_bundle(),
+                kind,
+                _markdown_from(
+                    llm,
+                    prompt.format(
+                        limit=WORD_LIMITS[kind],
+                        existing=strip_frontmatter(existing.get(filename, "")) or "(none)",
+                        bundle=context.to_prompt_bundle(),
+                    ),
                 ),
-            ),
-        )
-        bundle_out.files["eli15.md"] = with_frontmatter(provenance(context), body)
-
-    if context.bootstrap or updates.technical:
-        body = _fit(
-            llm,
-            "technical",
-            _markdown_from(
-                llm,
-                TECHNICAL_PROMPT.format(
-                    limit=WORD_LIMITS["technical"],
-                    existing=strip_frontmatter(existing.get("technical.md", "")) or "(none)",
-                    bundle=context.to_prompt_bundle(),
-                ),
-            ),
-        )
-        bundle_out.files["technical.md"] = with_frontmatter(provenance(context), body)
-
-    if context.bootstrap or updates.references:
-        body = _fit(
-            llm,
-            "references",
-            _markdown_from(
-                llm,
-                REFERENCES_PROMPT.format(
-                    limit=WORD_LIMITS["references"],
-                    human_refs=context.orpheon.get("references") or "(none listed)",
-                    discovered=discovered or [],
-                    existing=strip_frontmatter(existing.get("references.md", "")) or "(none)",
-                    bundle=context.to_prompt_bundle(include_diff=not context.bootstrap),
-                ),
-            ),
-        )
-        bundle_out.files["references.md"] = with_frontmatter(provenance(context), body)
+            )
+            bundle_out.files[filename] = with_frontmatter(provenance(context), body)
 
     if context.bootstrap or updates.architecture:
         existing_mmd = existing.get("architecture.mmd", "")
@@ -299,25 +237,6 @@ def generate_docs(
         previous = strip_frontmatter(existing.get("build-log.md", ""))
         bundle_out.files["build-log.md"] = with_frontmatter(provenance(context), append_entry(previous, entry))
 
-    if classification.major_evolution or updates.evolution:
-        payload = llm.generate_structured(
-            EVOLUTION_PROMPT.format(
-                number=_next_evolution_number(existing.get("evolution.md", "")),
-                date=today_long(),
-                existing=strip_frontmatter(existing.get("evolution.md", "")) or "(none)",
-                bundle=context.to_prompt_bundle(),
-            ),
-            system=SYSTEM,
-            max_tokens=1200,
-        )
-        if not payload.get("skip"):
-            evo = str(payload.get("markdown") or "").strip()
-            if evo:
-                previous = strip_frontmatter(existing.get("evolution.md", ""))
-                body = (previous + "\n\n" + evo).strip() if previous else evo
-                bundle_out.files["evolution.md"] = with_frontmatter(provenance(context), body)
-
-    references_md = bundle_out.files.get("references.md") or existing.get("references.md") or ""
     metadata = {
         "name": project_name,
         "slug": context.slug,
@@ -330,12 +249,10 @@ def generate_docs(
         "last_updated": today_iso(),
         "last_commit": context.sha,
         "commit_count": max(context.ahead_by, len(context.commits), 0),
-        "reference_count": _count_references(references_md),
         "github": context.html_url,
     }
     if not metadata["categories"]:
         metadata["categories"] = ["Unsorted"]
-    # Preserve previous commit_count by adding ahead_by if we have existing metadata.
     previous_meta = existing.get("metadata.json")
     if previous_meta and not context.bootstrap:
         try:
@@ -358,10 +275,3 @@ def _dump_json(data: dict[str, Any]) -> str:
     import json
 
     return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
-
-
-def _next_evolution_number(existing: str) -> int:
-    import re
-
-    numbers = [int(n) for n in re.findall(r"Evolution #(\d+)", existing)]
-    return (max(numbers) + 1) if numbers else 1

@@ -18,7 +18,12 @@ def test_shipped_journals_pass_validation_and_word_limits():
         }
         result = validate_bundle(files, tree=[], bootstrap=True)
         assert result.ok, f"{folder.name}: {result.errors}"
-        mapping = {"eli15.md": "eli15", "technical.md": "technical", "references.md": "references"}
+        mapping = {
+            "problem.md": "problem",
+            "summary.md": "summary",
+            "results.md": "results",
+            "examples.md": "examples",
+        }
         for name, kind in mapping.items():
             count = word_count(files[name])
             assert count <= WORD_LIMITS[kind], f"{folder.name}/{name} has {count} words"

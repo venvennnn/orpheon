@@ -51,6 +51,88 @@ body {
   max-width: 40rem;
 }
 
+.project-page {
+  max-width: 960px;
+  margin: 0 auto;
+  color: #333;
+}
+
+.project-page .section-title,
+.project-card > h2 {
+  color: #202124;
+  font-weight: 500;
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 0 0 1rem;
+}
+
+.project-card {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 30px;
+  margin: 2.5rem 0;
+  border: 1px solid #e8eaed;
+}
+
+.project-card > h2 {
+  text-align: left;
+  font-size: 1.5rem;
+}
+
+.project-card .prose-journal {
+  max-width: none;
+  font-size: 0.95rem;
+}
+
+.project-pill {
+  display: inline-block;
+  padding: 10px 22px;
+  background: #1a73e8;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project-pill:hover {
+  background: #185abc;
+}
+
+.takeaways {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 26px;
+}
+
+.takeaway h3 {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1a73e8;
+}
+
+.takeaway .prose-journal {
+  font-size: 0.9rem;
+  color: #3c4043;
+}
+
+.fig-container {
+  background: #fff;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid #e8eaed;
+  overflow-x: auto;
+}
+
+@media (min-width: 768px) {
+  .takeaways {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .prose-journal a {
   text-underline-offset: 3px;
 }

@@ -1,0 +1,34 @@
+---
+import type { Project } from "../lib/projects";
+import { githubUrl } from "../lib/projects";
+import { site } from "../lib/site";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { meta } = project;
+---
+
+<header class="text-center">
+  <h1 class="text-[1.85rem] font-medium leading-tight tracking-tight text-ink sm:text-[2.4rem]">
+    {meta.name}
+  </h1>
+  {
+    meta.tagline && (
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-ink-soft">{meta.tagline}</p>
+    )
+  }
+  <p class="mt-5 text-[1.05rem] text-[#3c4043]">{site.ownerName}</p>
+  <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+    <a class="project-pill" href={githubUrl(project)} rel="noreferrer">GitHub</a>
+    {
+      meta.demo && (
+        <a class="project-pill" href={meta.demo} rel="noreferrer">
+          Demo
+        </a>
+      )
+    }
+  </div>
+</header>
