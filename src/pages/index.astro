@@ -2,17 +2,12 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { loadAllProjects } from "../lib/projects";
-import { site } from "../lib/site";
 
 const projects = loadAllProjects();
 ---
 
 <BaseLayout>
-  <p class="text-sm text-ink-soft">{site.tagline}</p>
-
-  <section class="mt-8">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {projects.map((project) => <ProjectCard project={project} />)}
-    </div>
-  </section>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {projects.map((project) => <ProjectCard project={project} />)}
+  </div>
 </BaseLayout>

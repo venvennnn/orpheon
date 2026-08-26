@@ -1,9 +1,8 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import ProjectHeader from "../../../components/ProjectHeader.astro";
-import { loadAllProjects, splitBuildLog, splitEvolutions, type Project } from "../../../lib/projects";
+import ProjectHero from "../../../components/ProjectHero.astro";
+import { loadAllProjects, splitTakeaways, type Project } from "../../../lib/projects";
 import { renderMarkdown } from "../../../lib/markdown";
-import { withBase } from "../../../lib/site";
 
 export function getStaticPaths() {
   return loadAllProjects().map((project) => ({
@@ -17,49 +16,70 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const latest = splitBuildLog(project.buildLog?.body || "").slice(0, 1)[0];
-const evolution = splitEvolutions(project.evolution?.body || "").slice(-1)[0];
-const depths = [
-  ["Explain simply", "A short walkthrough of what it is and who it is for.", "eli15"],
-  ["Technical", "Components, APIs, and how to run it.", "technical"],
-  ["References", "What the repo used, and related reading.", "references"],
-  ["History", "Append-only notes of how the work changed.", "history"],
-];
+const summary = splitTakeaways(project.summary?.body || "");
 ---
 
 <BaseLayout title={project.meta.name} description={project.meta.tagline || project.meta.description}>
-  <ProjectHeader project={project} />
+  <article class="project-page">
+    <ProjectHero project={project} />
 
-  <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
     {
-      depths.map(([label, blurb, suffix]) => (
-        <a
-          class="flex h-full flex-col border border-line p-4 hover:border-ink"
-          href={withBase(`projects/${project.meta.slug}/${suffix}`)}
-        >
-          <h2 class="text-base font-medium">{label}</h2>
-          <p class="mt-2 flex-1 text-sm text-ink-soft">{blurb}</p>
-        </a>
-      ))
+      project.problem && (
+        <section class="project-card">
+          <h2>Problem</h2>
+          <div class="prose prose-journal" set:html={renderMarkdown(project.problem.body)} />
+        </section>
+      )
     }
-  </div>
 
-  {
-    latest && (
-      <section class="mt-12">
-        <h2 class="text-sm text-ink-soft">Latest log</h2>
-        <p class="mt-2 text-sm">{latest.date}</p>
-        <div class="prose prose-journal mt-2 text-sm" set:html={renderMarkdown(latest.body)} />
-      </section>
-    )
-  }
+    {
+      project.summary && (
+        <section class="project-card">
+          <h2>Summary</h2>
+          {summary.intro && (
+            <div class="prose prose-journal" set:html={renderMarkdown(summary.intro)} />
+          )}
+          {summary.takeaways.length > 0 && (
+            <div class:list={["takeaways", summary.intro && "mt-8"]}>
+              {summary.takeaways.map((item) => (
+                <div class="takeaway">
+                  <h3>{item.title}</h3>
+                  <div class="prose prose-journal" set:html={renderMarkdown(item.body)} />
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )
+    }
 
-  {
-    evolution && (
-      <section class="mt-12">
-        <h2 class="text-sm text-ink-soft">Evolution</h2>
-        <div class="prose prose-journal mt-3" set:html={renderMarkdown(evolution)} />
-      </section>
-    )
-  }
+    {
+      project.architecture && (
+        <section>
+          <h2 class="section-title">Architecture</h2>
+          <div class="fig-container">
+            <pre class="mermaid">{project.architecture}</pre>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      project.results && (
+        <section class="project-card">
+          <h2>Results</h2>
+          <div class="prose prose-journal" set:html={renderMarkdown(project.results.body)} />
+        </section>
+      )
+    }
+
+    {
+      project.examples && (
+        <section class="project-card">
+          <h2>Examples</h2>
+          <div class="prose prose-journal" set:html={renderMarkdown(project.examples.body)} />
+        </section>
+      )
+    }
+  </article>
 </BaseLayout>

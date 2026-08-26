@@ -95,7 +95,15 @@ def load_existing_docs(slug: str) -> dict[str, str]:
     if not folder.is_dir():
         return {}
     docs: dict[str, str] = {}
-    for name in ("eli15.md", "technical.md", "references.md", "build-log.md", "architecture.mmd", "evolution.md", "metadata.json"):
+    for name in (
+        "problem.md",
+        "summary.md",
+        "results.md",
+        "examples.md",
+        "build-log.md",
+        "architecture.mmd",
+        "metadata.json",
+    ):
         path = folder / name
         if path.exists():
             docs[name] = path.read_text(encoding="utf-8")
